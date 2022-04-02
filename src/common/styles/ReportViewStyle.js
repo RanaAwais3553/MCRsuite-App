@@ -1,0 +1,91 @@
+import { Dimensions, StyleSheet } from "react-native";
+import { hp, wp } from "./Dimensions";
+let { height: screenHeight, width: screenWidth } = Dimensions.get("window");
+const ReportViewStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    // backgroundColor: '#F2F8FD',
+    paddingHorizontal: wp(2),
+    // paddingVertical: hp(5),
+    paddingTop: hp(2),
+  },
+  headerView: {
+    // flex: 0.5,
+    borderRadius: 20,
+    paddingVertical: 10,
+    // marginVertical: 10,
+    backgroundColor: "white",
+    // marginHorizontal: 10,
+    // justifyContent: "space-between",
+    // paddingVertical: 5,
+    // paddingHorizontal: 7,
+  },
+  detailView: {
+    flex: 1,
+    backgroundColor: "white",
+    // marginHorizontal: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginVertical: 10,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "green",
+  },
+  detailHeading: {
+    paddingTop: 10,
+    paddingVertical: 5,
+  },
+  checkboxView: {
+    borderRadius: 20,
+    marginVertical: 5,
+    paddingHorizontal: 7,
+    paddingVertical: hp(2),
+    paddingTop: hp(2),
+    backgroundColor: "#fff",
+  },
+  checkboxText: {
+    padding: 10,
+    marginVertical: hp(0.2),
+  },
+  detailView: {
+    flex: 1,
+    backgroundColor: "white",
+    // marginHorizontal: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginVertical: 10,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "green",
+  },
+  detailHeading: {
+    paddingTop: 10,
+    paddingVertical: 5,
+  },
+  detailText: {
+    flex: 0.3,
+    borderRadius: 5,
+    // borderTopWidth: 0.3,
+    // borderBottomWidth: 0.3,
+    borderColor: "grey",
+    marginTop: 10,
+    // paddingLeft: 10,
+    // paddingTop: 7,
+    paddingBottom: 5,
+  },
+  headerCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+    paddingEnd: 10,
+  },
+  incidentView: {
+    flexGrow: 0.07,
+    //    flex: 0.4,
+    backgroundColor: "white",
+    borderRadius: 20,
+    marginVertical: 10,
+    paddingHorizontal: 7,
+  },
+});
+export { ReportViewStyle };
