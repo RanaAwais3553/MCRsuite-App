@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { View, Text, TouchableOpacity, LogBox } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card, Avatar } from "react-native-paper";
@@ -8,35 +8,15 @@ const timeToString = (time) => {
   return date.toISOString().split("T")[0];
 };
 
-const Calender = () => {
+const Calender = ({
+  eventCalendar,
+  activeDate,
+  siteEventsArray,
+  navigation,
+}) => {
   LogBox.ignoreLogs(["Failed prop type: Invalid prop"]); // Ignore log notification by message
-
-  const [items, setItems] = useState({
-    "2012-05-22": [{ name: "9pm-2pm Hafeez Center" }],
-    "2012-05-23": [
-      {
-        name: "1st Event 9pm - 2pm Hafeez Center Lahore ,Punjab, Pakistan ",
-        height: 80,
-      },
-      {
-        name: "2nd Event 3pm - 8pm Hafeez Center Lahore ,Punjab, Pakistan ",
-        height: 80,
-      },
-    ],
-    "2012-05-24": [],
-    "2012-05-25": [
-      { name: "item 3 - any js object" },
-      { name: "any js object" },
-    ],
-    "2013-05-24": [
-      { name: "item 4 - any js object" },
-      { name: "any js object" },
-    ],
-    "2013-05-25": [
-      { name: "item 5 - any js object" },
-      { name: "any js object" },
-    ],
-  });
+  console.log(eventCalendar);
+  const [items, setItems] = useState(eventCalendar);
 
   const loadItems = (day) => {
     setTimeout(() => {
@@ -63,10 +43,18 @@ const Calender = () => {
   };
 
   const renderItem = (item) => {
-    console.log("items are:!...", item);
+    console.log("items are:!...", item.id);
     return (
-      <TouchableOpacity style={{ marginRight: 10, marginTop: 27 }}>
-        <Card>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("EventDetail", {
+            id: item.id,
+            siteEventsArray: siteEventsArray,
+          });
+        }}
+        style={{ marginRight: 10, marginTop: 27 }}
+      >
+        <Card style={{ backgroundColor: item.color }}>
           <Card.Content>
             <View
               style={{
@@ -76,7 +64,9 @@ const Calender = () => {
                 alignItems: "flex-start",
               }}
             >
-              <Text style={{ textAlign: "left" }}>{item.name}</Text>
+              <Text style={{ textAlign: "left", color: "#fff" }}>
+                {item.name ? item.name : "Event not exist"}
+              </Text>
               {/* <Avatar.Text label="M" /> */}
             </View>
           </Card.Content>
@@ -86,27 +76,50 @@ const Calender = () => {
   };
 
   return (
-    <View style={{ flex: 1, alignSelf: "stretch", marginBottom: 50 }}>
+    <View
+      style={{
+        flex: 1,
+        alignSelf: "stretch",
+        backgroundColor: "#f2f2f2",
+        marginBottom: 20,
+      }}
+    >
       <Agenda
         items={items}
         //  loadItemsForMonth={loadItems}
-        selected={"2012-05-22"}
-        minDate={"2012-05-10"}
-        maxDate={"2014-05-30"}
+        selected={activeDate ? activeDate : "2022-04-19"}
+        minDate={"2021-11-10"}
+        maxDate={"2022-12-30"}
         renderItem={renderItem}
         renderEmptyData={() => {
           return null;
         }}
         theme={{
+          backgroundColor: "#f2f2f2",
+
           selectedDayBackgroundColor: "#3155a5",
           dotColor: "#3155a5",
         }}
+        // onCalendarToggled={(calendarOpened) => {
+        //   callBackScrollEnable();
+        //   console.log("calander toggle is:&&&&&&&&&", calendarOpened);
+        // }}
+        // onDayPress={(day) => {
+        //   callBackScrollEnableOnDayPress();
+        //   console.log("day pressed");
+        // }}
+        // onDayChange={(day) => {
+        //   callBackScrollEnableOnDayPress();
+        //   console.log("day changed");
+        // }}
+        showOnlySelectedDayItems={true}
+        // calendarHeight={120}
       />
     </View>
   );
 };
 
-export default Calender;
+export default memo(Calender);
 
 {
   /* <CalendarList

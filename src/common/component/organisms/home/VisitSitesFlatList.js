@@ -3,6 +3,7 @@ import { View, Text, Dimensions, FlatList } from "react-native";
 import Sites from "../../atom/Sites";
 let { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 import { fetchSiteListData } from "../../../../store/action/siteListAction";
+import { fetchNewsReelData } from "../../../../store/action/fetchNewsReel";
 import ActivityIndicatorComponent from "../../atom/ActivityIndicatorComponent";
 import { useDispatch, useSelector } from "react-redux";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -20,7 +21,7 @@ function VisitSitesFlatList({ navigation }) {
     setError(null);
     setIsLoading(true);
     try {
-      await dispatch(fetchSiteListData());
+      await dispatch(fetchNewsReelData());
       setRefresh(false);
       setIsLoading(false);
     } catch (err) {
@@ -28,7 +29,7 @@ function VisitSitesFlatList({ navigation }) {
       setIsLoading(false);
     }
   };
-  const siteListArray = useSelector((state) => state.siteList.siteListArray);
+  const newsReelArray = useSelector((state) => state.newsReel.newsReelArray);
   const modalToggleState = () => {
     setRefresh(false);
     setError("");
@@ -38,15 +39,15 @@ function VisitSitesFlatList({ navigation }) {
     return (
       <View style={{ flex: 1, width: "100%" }}>
         <Sites
-          title={itemData.item.name}
-          onSelect={() => {
-            navigation.navigate("SitesDetail", {
-              name: itemData.item.name,
-              email: itemData.item.email,
-              address: itemData.item.address,
-              sitesTimeSlotsArray: itemData.item.sitecalendars,
-            });
-          }}
+          title={itemData.item.message}
+          // onSelect={() => {
+          //   navigation.navigate("SitesDetail", {
+          //     name: itemData.item.name,
+          //     email: itemData.item.email,
+          //     address: itemData.item.address,
+          //     sitesTimeSlotsArray: itemData.item.sitecalendars,
+          //   });
+          // }}
         />
       </View>
     );
@@ -75,11 +76,11 @@ function VisitSitesFlatList({ navigation }) {
           >
             <SitesListHeader
               navigation={navigation}
-              siteListArray={siteListArray}
+              newsReelArray={newsReelArray}
             />
           </View>
           <View style={{ flex: 1 }}>
-            {siteListArray.length === 0 ? (
+            {newsReelArray.length === 0 ? (
               <View
                 style={{
                   flex: 1,
@@ -97,12 +98,12 @@ function VisitSitesFlatList({ navigation }) {
               </View>
             ) : (
               <FlatList
-                data={siteListArray}
+                data={newsReelArray}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 //        horizontal={true}
-                numColumns={2}
+                numColumns={1}
                 //   ListHeaderComponent={sitesListHeader}
                 // stickyHeaderIndices={[0]}
                 // ListHeaderComponentStyle={{

@@ -27,9 +27,7 @@ import AndroidOpenSettings from "react-native-android-open-settings";
 let { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const DailyInspectionReport = ({ navigation, route }) => {
   let clears;
-  // LogBox.ignoreLogs([
-  //   "Can't perform a React state update on an unmounted component.",
-  // ]); // Ignore log notification by message
+
   const siteListArray = useSelector((state) => state.siteList.siteListArray);
   let updateArray = [];
   const {
@@ -115,17 +113,17 @@ const DailyInspectionReport = ({ navigation, route }) => {
       long,
       lat
     );
-    let formData = update ? new URLSearchParams() : new FormData();
-    formData.append("type", "inspectionReport");
-    formData.append("siteName", dropdown);
-    formData.append("obstructionFree", firstcheckbox);
-    formData.append("fireExtinguishers", secondcheckbox);
-    formData.append("posterFree", thiredcheckbox);
-    formData.append("reportHazard", fourthcheckbox);
-    formData.append("additionalInfo", multiLineText);
-    formData.append("longitude", long);
-    formData.append("latitude", lat);
-    console.log("Form Handler Called!...");
+    let formData = {
+      type: "inspectionReport",
+      siteName: dropdown,
+      obstructionFree: firstcheckbox,
+      fireExtinguishers: secondcheckbox,
+      posterFree: thiredcheckbox,
+      reportHazard: fourthcheckbox,
+      additionalInfo: multiLineText,
+      longitude: long,
+      latitude: lat,
+    };
     {
       lat == null || long == null
         ? Alert.alert(

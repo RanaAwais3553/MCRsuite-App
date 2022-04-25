@@ -25,9 +25,13 @@ export const INITIALIZE_STATE = "INITIALIZE_STATE";
 export const SET_UPDATE_FORM_DATA = "SET_UPDATE_FORM_DATA";
 export const CLEAR_UPDATE_FORM_DATA = "CLEAR_UPDATE_FORM_DATA";
 export const CLEAR_REPORT_STORE_DATA = "CLEAR_REPORT_STORE_DATA";
+import apiClient from "../../../config/axios";
+import ApiUrls from "../../../config/apiUrls";
+import AsyncStorageService from "../../../services/storage-service";
+import makeFormData from "../../../utils/makeFormData";
+
 axios.defaults.timeout === 5000;
-// const httpClient = axios.create();
-// httpClient.defaults.timeout = 2000;
+
 export const clearUpdateFormData = () => {
   return { type: CLEAR_UPDATE_FORM_DATA };
 };
@@ -60,28 +64,21 @@ export const clearState = () => {
 export const clearReportsStore = () => {
   return { type: CLEAR_REPORT_STORE_DATA };
 };
+
+// **************************************************************   GET Request functions start
+
 export const fetchDailyInceptionReportData = () => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
     await dispatch(fetchSiteListData());
     try {
-      const response = await fetch(`https://mcrsuite.com/api/api-reports`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
+      let response = await apiClient().get(`${ApiUrls.fetchDailyReports}`);
+      if (!response.status == 200) {
         console.log("daily report error is:!...", response);
-        throw new Error("Something went wrong!");
+        throw new Error(response.status);
       }
-      const resData = await response.json();
-      // console.log("daily report data", resData);
       dispatch({
         type: FETCH_DAILY_INCEPECTION_REPORT_DATA,
-        reportArray: resData.inspectionReports,
+        reportArray: response.data.inspectionReports,
       });
     } catch (err) {
       throw err;
@@ -91,28 +88,15 @@ export const fetchDailyInceptionReportData = () => {
 
 export const fetchIncidentReportData = () => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
     await dispatch(fetchSiteListData());
     try {
-      const response = await fetch(
-        `https://mcrsuite.com/api/Incident-Reports`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
+      let response = await apiClient().get(`${ApiUrls.fetchIncidentReport}`);
+      if (!response.status == 200) {
+        throw new Error(response.status);
       }
-      const resData = await response.json();
-
       dispatch({
         type: FETCH_INCIDENT_REPORT_DATA,
-        reportArray: resData.incidentReports,
+        reportArray: response.data.incidentReports,
       });
     } catch (err) {
       throw err;
@@ -122,28 +106,15 @@ export const fetchIncidentReportData = () => {
 
 export const fetchMobileReportData = () => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
     await dispatch(fetchSiteListData());
     try {
-      const response = await fetch(
-        `https://mcrsuite.com/api/Mobile-Patrol-Report`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
+      let response = await apiClient().get(`${ApiUrls.fetchMobileReports}`);
+      if (!response.status == 200) {
+        throw new Error(response.status);
       }
-      const resData = await response.json();
-
       dispatch({
         type: FETCH_MOBILE_REPORT_DATA,
-        reportArray: resData.mobileReports,
+        reportArray: response.data.mobileReports,
       });
     } catch (err) {
       throw err;
@@ -153,28 +124,15 @@ export const fetchMobileReportData = () => {
 
 export const fetchSiteVisitReportData = () => {
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
     await dispatch(fetchSiteListData());
     try {
-      const response = await fetch(
-        `https://mcrsuite.com/api/Site-Visit-Reports`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
+      let response = await apiClient().get(`${ApiUrls.fetchSiteVisit}`);
+      if (!response.status == 200) {
+        throw new Error(response.status);
       }
-      const resData = await response.json();
-
       dispatch({
         type: FETCH_SITE_VISIT_REPORT_DATA,
-        reportArray: resData.siteVisitReports,
+        reportArray: response.data.siteVisitReports,
       });
     } catch (err) {
       throw err;
@@ -182,191 +140,123 @@ export const fetchSiteVisitReportData = () => {
   };
 };
 
-// post functions start
+// **************************************************************   POST Request functions start
+
 export const postDailyInceptionReportData = (formData, update, id) => {
   console.log("post daily inspection report data is:!...", formData);
+  const reportObject = makeFormData(formData, update);
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
-
-    const url = update
-      ? `https://mcrsuite.com/api/api-reports/${id}`
-      : `https://mcrsuite.com/api/api-reports`;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": update
-          ? "application/x-www-form-urlencoded"
-          : "form-data",
-      },
-    };
-    console.log("in daily inspectoin report axios");
     dispatch({ type: POST_DAILY_REPORT_REQUEST });
-    axios({
-      method: update ? "PUT" : "POST",
-      url,
-      timeout: 5000,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": update
-          ? "application/x-www-form-urlencoded"
-          : "form-data",
-      },
-      data: formData, // important
-    })
-      .then((result) => {
-        dispatch(fetchSiteListData());
-        dispatch(fetchDailyInceptionReportData());
-        dispatch({
-          type: POST_DAILY_INCEPECTION_REPORT_SUCCESS,
-          success: result.data.success[0],
-        });
-        console.log("back end response data is:...", result.data.success[0]);
-      })
-      .catch((err) => {
-        dispatch({
-          type: POST_DAILY_REPORT_FAILED,
-          error: err.response.data.errors[0]
-            ? err.response.data.errors[0]
-            : "Server not respond",
-        });
-        console.log("error message is:!...", err);
+    try {
+      let response = !!update
+        ? await apiClient().put(`${ApiUrls.postReports}/${id}`, reportObject)
+        : await apiClient().post(`${ApiUrls.postReports}`, reportObject);
+      if (!response.status == 200) {
+        throw new Error(response.status);
+      }
+      dispatch(fetchSiteListData());
+      dispatch(fetchDailyInceptionReportData());
+      dispatch({
+        type: POST_DAILY_INCEPECTION_REPORT_SUCCESS,
+        success: response.data.success[0],
       });
+    } catch (err) {
+      dispatch({
+        type: POST_DAILY_REPORT_FAILED,
+        error: err.response.data.errors[0]
+          ? err.response.data.errors[0]
+          : "Server not respond",
+      });
+    }
   };
 };
 
 export const postIncidentReportData = (formData, update, id) => {
   console.log("Post Incident Report Data", formData);
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
-
-    const url = update
-      ? `https://mcrsuite.com/api/api-reports/${id}`
-      : `https://mcrsuite.com/api/api-reports`;
     dispatch({ type: POST_DAILY_REPORT_REQUEST });
-    axios({
-      url,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "form-data",
-      },
-      data: formData, // important
-    })
-      .then((result) => {
-        console.log(
-          "Post Incident Report API response",
-          result.data.success[0]
-        );
-        dispatch(fetchSiteListData());
-        dispatch(fetchIncidentReportData());
-        dispatch({
-          type: POST_INCIDENT_REPORT_SUCCESS,
-          success: result.data.success[0],
-        });
-      })
-      .catch((err) => {
-        console.log("error is:!...", err);
-        dispatch({
-          type: POST_DAILY_REPORT_FAILED,
-          error: "Server not respond",
-        });
-        console.log("error message is:!...", err);
+    try {
+      let response = !!update
+        ? await apiClient().put(`${ApiUrls.postReports}/${id}`, formData)
+        : await apiClient().post(`${ApiUrls.postReports}`, formData);
+      if (!response.status == 200) {
+        throw new Error(response.status);
+      }
+      console.log(
+        "response is &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+        response.data
+      );
+      dispatch(fetchSiteListData());
+      dispatch(fetchIncidentReportData());
+      dispatch({
+        type: POST_INCIDENT_REPORT_SUCCESS,
+        success: response.data.success[0],
       });
+    } catch (err) {
+      dispatch({
+        type: POST_DAILY_REPORT_FAILED,
+        error: "Server not respond",
+      });
+      console.log("error is", err);
+    }
   };
 };
 export const postSiteVisitReportData = (formData, update, id) => {
   console.log("site visit report data", formData);
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
-
-    const url = update
-      ? `https://mcrsuite.com/api/api-reports/${id}`
-      : `https://mcrsuite.com/api/api-reports`;
     dispatch({ type: POST_DAILY_REPORT_REQUEST });
-    axios({
-      url,
-      method: update ? "PUT" : "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": update
-          ? "application/x-www-form-urlencoded"
-          : "form-data",
-      },
-      data: formData, // important
-    })
-      .then((result) => {
-        dispatch(fetchSiteListData());
-        dispatch(fetchSiteVisitReportData());
-        dispatch({
-          type: POST_SITE_VISST_REPORT_SUCCESS,
-          success: result.data.success[0],
-        });
-        console.log("back end response data is:...", result.data.success[0]);
-      })
-      .catch((err) => {
-        dispatch({
-          type: POST_DAILY_REPORT_FAILED,
-          error: err.response.data.errors[0]
-            ? err.response.data.errors[0]
-            : "Server not respond",
-        });
-        console.log("error message is:!...", err);
+    try {
+      let response = !!update
+        ? await apiClient().put(`${ApiUrls.postReports}/${id}`, formData)
+        : await apiClient().post(`${ApiUrls.postReports}`, formData);
+      if (!response.status == 200) {
+        throw new Error(response.status);
+      }
+      dispatch(fetchSiteListData());
+      dispatch(fetchSiteVisitReportData());
+      dispatch({
+        type: POST_SITE_VISST_REPORT_SUCCESS,
+        success: response.data.success[0],
       });
+    } catch (err) {
+      dispatch({
+        type: POST_DAILY_REPORT_FAILED,
+        error: err.response.data.errors[0]
+          ? err.response.data.errors[0]
+          : "Server not respond",
+      });
+    }
   };
 };
 export const postMobileReportData = (formData, update, id) => {
-  console.log("post mobile report data is:!...", formData);
   return async (dispatch) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const transformedData = JSON.parse(userData);
-    const { token, type } = transformedData;
-    const url = update
-      ? `https://mcrsuite.com/api/api-reports/${id}`
-      : `https://mcrsuite.com/api/api-reports`;
     dispatch({ type: POST_DAILY_REPORT_REQUEST });
-    axios({
-      url,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "form-data",
-      },
-      data: formData, // important
-    })
-      .then((result) => {
-        console.log(
-          "result of mobile report post data success is:!.&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
-          result.data.success[0]
-        );
-        dispatch(fetchSiteListData());
-        dispatch(fetchMobileReportData());
-        dispatch({
-          type: POST_MOBILE_REPORT_SUCCESS,
-          success: result.data.success[0],
-        });
-        console.log(
-          "back end response data is:...***************************************************",
-          // result.status,
-          result.data.success[0]
-        );
-      })
-      .catch((err) => {
-        console.log("error message is:!...", err);
-        dispatch({
-          type: POST_DAILY_REPORT_FAILED,
-          error: err.response.data.errors[0]
-            ? err.response.data.errors[0]
-            : "Server not respond",
-        });
+
+    try {
+      let response = !!update
+        ? await apiClient().put(`${ApiUrls.postReports}/${id}`, formData)
+        : await apiClient().post(`${ApiUrls.postReports}`, formData);
+      if (!response.status == 200) {
+        throw new Error(response.status);
+      }
+      dispatch(fetchSiteListData());
+      dispatch(fetchMobileReportData());
+      dispatch({
+        type: POST_MOBILE_REPORT_SUCCESS,
+        success: response.data.success[0],
       });
+    } catch (err) {
+      dispatch({
+        type: POST_DAILY_REPORT_FAILED,
+        error: err.response.data.errors[0]
+          ? err.response.data.errors[0]
+          : "Server not respond",
+      });
+    }
   };
 };
+
+// **************************************************************   DELETE Request functions start
 
 export const deleteDailyInceptionReport = (id, type) => {
   // console.log("inspectionReport report form data:!...");
@@ -376,24 +266,17 @@ export const deleteDailyInceptionReport = (id, type) => {
     const { token } = transformedData;
     try {
       dispatch({ type: POST_DAILY_REPORT_REQUEST });
-      const response = await fetch(
-        `https://mcrsuite.com/api/api-reports/${id}?type=inspectionReport`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      let response = await apiClient().delete(
+        `${ApiUrls.deleteReports}/${id}?type=inspectionReport`
       );
-      if (!response.ok) {
-        const errorResData = await response.json();
-        const errormessage = errorResData["errors"];
+      if (!response.status == 200) {
+        const errormessage = response.data["errors"];
         console.log("error message is:!...", errormessage[0]);
         throw new Error(errormessage[0]);
       }
-      const resData = await response.json();
+
       await dispatch(fetchDailyInceptionReportData());
-      const resmessage = resData["success"];
+      const resmessage = response.data["success"];
       dispatch({
         type: DELETE_DAILY_REPORT_SUCCESS,
         success: resmessage[0],
@@ -403,41 +286,28 @@ export const deleteDailyInceptionReport = (id, type) => {
         type: POST_DAILY_REPORT_FAILED,
         error: err.message,
       });
-      //           throw err;
     }
   };
 };
 
 export const deleteIncidentReport = (id) => {
-  console.log(
-    "incidentReport report form data:!.................................",
-    id
-  );
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
     const { token } = transformedData;
     try {
       dispatch({ type: POST_DAILY_REPORT_REQUEST });
-      const response = await fetch(
-        `https://mcrsuite.com/api/api-reports/${id}?type=incidentReport`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+
+      let response = await apiClient().delete(
+        `${ApiUrls.deleteReports}/${id}?type=incidentReport`
       );
-      if (!response.ok) {
-        const errorResData = await response.json();
-        const errormessage = errorResData["errors"];
+      if (!response.status == 200) {
+        const errormessage = response.data["errors"];
         console.log("error message is:!...", errormessage[0]);
         throw new Error(errormessage[0]);
       }
-      const resData = await response.json();
-      console.log("delete incident report error is:", resData);
       await dispatch(fetchIncidentReportData());
-      const resmessage = resData["success"];
+      const resmessage = response.data["success"];
       dispatch({
         type: DELETE_DAILY_REPORT_SUCCESS,
         success: resmessage[0],
@@ -448,36 +318,28 @@ export const deleteIncidentReport = (id) => {
         error: err.message,
       });
       console.log("delete incident report error is:", err);
-      //           throw err;
     }
   };
 };
 
 export const deleteSiteVisitReport = (id) => {
-  // console.log("siteVisitReport report form data:!...");
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
     const { token } = transformedData;
     try {
       dispatch({ type: POST_DAILY_REPORT_REQUEST });
-      const response = await fetch(
-        `https://mcrsuite.com/api/api-reports/${id}?type=siteVisitReport`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+
+      let response = await apiClient().delete(
+        `${ApiUrls.deleteReports}/${id}?type=siteVisitReport`
       );
-      if (!response.ok) {
-        const errorResData = await response.json();
-        const errormessage = errorResData["errors"];
+      if (!response.status == 200) {
+        const errormessage = response.data["errors"];
         throw new Error(errormessage[0]);
       }
-      const resData = await response.json();
+
       await dispatch(fetchSiteVisitReportData());
-      const resmessage = resData["success"];
+      const resmessage = response.data["success"];
       dispatch({
         type: DELETE_DAILY_REPORT_SUCCESS,
         success: resmessage[0],
@@ -487,37 +349,29 @@ export const deleteSiteVisitReport = (id) => {
         type: POST_DAILY_REPORT_FAILED,
         error: err.message,
       });
-      //           throw err;
     }
   };
 };
 
 export const deleteMobileReport = (id) => {
-  // console.log("siteVisitReport report form data:!...");
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
     const { token } = transformedData;
     try {
       dispatch({ type: POST_DAILY_REPORT_REQUEST });
-      const response = await fetch(
-        `https://mcrsuite.com/api/api-reports/${id}?type=mobileReports`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+
+      let response = await apiClient().delete(
+        `${ApiUrls.deleteReports}/${id}?type=mobileReports`
       );
-      if (!response.ok) {
-        const errorResData = await response.json();
-        const errormessage = errorResData["errors"];
+      if (!response.status == 200) {
+        const errormessage = response.data["errors"];
         console.log("error message is:!...", errormessage[0]);
         throw new Error(errormessage[0]);
       }
-      const resData = await response.json();
+
       await dispatch(fetchMobileReportData());
-      const resmessage = resData["success"];
+      const resmessage = response.data["success"];
       dispatch({
         type: DELETE_DAILY_REPORT_SUCCESS,
         success: resmessage[0],
@@ -527,7 +381,6 @@ export const deleteMobileReport = (id) => {
         type: POST_DAILY_REPORT_FAILED,
         error: err.message,
       });
-      //           throw err;
     }
   };
 };

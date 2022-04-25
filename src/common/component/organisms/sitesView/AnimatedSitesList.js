@@ -7,12 +7,24 @@ import {
   Text,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/AntDesign";
+import { useDispatch } from "react-redux";
+import {
+  hideOrShowBottomTabBarAction,
+  showBottomTabBarAction,
+} from "../../../../store/action/hideOrShowBottomTabBarAction";
 import {
   widthPercentageToDP,
   heightPercentageToDP,
 } from "../../../styles/DimensionsTool";
 let { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 function AnimatedSitesList({ itemData, navigation, scrollY, onSelect }) {
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(hideOrShowBottomTabBarAction());
+  //   return () => {
+  //     dispatch(showBottomTabBarAction());
+  //   };
+  // }, [dispatch]);
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: "column" }}>

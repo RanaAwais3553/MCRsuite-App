@@ -3,7 +3,6 @@ import { hp, wp } from "./Dimensions";
 
 const SiteViewStyle = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: wp(6),
   },
   headerLogo: {
@@ -14,18 +13,20 @@ const SiteViewStyle = StyleSheet.create({
     // backgroundColor: "green",
   },
   userDetail: {
-    flex: 2,
-    backgroundColor: "#f2f2f2",
+    flexGrow: 0.1,
+    // backgroundColor: "#121212",
     // backgroundColor: "yellow",
     // justifyContent: "space-around",
     // alignItems: "center",
-    paddingVertical: hp(10),
+    paddingTop: hp(10),
   },
   card: {
     justifyContent: "center",
     alignItems: "flex-start",
-    paddingLeft: wp(5),
-    marginVertical: hp(1),
+    paddingHorizontal: wp(5),
+    marginTop: hp(1),
+    // marginBottom: hp(1),
+    // marginVertical: hp(1),
     paddingVertical: hp(2),
     // paddingHorizontal: wp(3),
     backgroundColor: "#ffffff",
@@ -35,11 +36,12 @@ const SiteViewStyle = StyleSheet.create({
     // marginVertical: 10,
   },
   cards: {
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: hp(1),
-    backgroundColor: "#ffffff",
+    // justifyContent: "flex-start",
+    // alignItems: "flex-end",
+    // marginVertical: hp(1),
+    backgroundColor: "#fff",
     // marginHorizontal: wp(6),
     borderRadius: wp(2),
   },

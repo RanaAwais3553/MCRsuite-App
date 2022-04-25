@@ -13,7 +13,6 @@ export const scanResponse = (
   long,
   lat
 ) => {
-  console.log("lat long in scan response is:!...", lat, long);
   return async (dispatch) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
@@ -55,6 +54,7 @@ export const scanResponse = (
         payload: successMessage[0],
       });
     } catch (err) {
+      console.log("error in scan API is:!....", err);
       throw err;
     }
   };

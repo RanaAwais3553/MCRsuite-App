@@ -23,7 +23,7 @@ const DownloadFile = ({ attachments }) => {
   const checkPermission = async (attachment) => {
     let imageName = attachment.replace(/(\r\n\s|\n|\r|\s)/gm, "");
     console.log("file name without space is:!...", imageName);
-    const url = `https://mcrsuite.com/files/${imageName}`;
+    const url = `https://mcrsuite.tk/files/${imageName}`;
 
     if (Platform.OS === "ios") {
       downloadImage(url, imageName);

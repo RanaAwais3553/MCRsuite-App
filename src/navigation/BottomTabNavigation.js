@@ -10,6 +10,8 @@ import TabRightButton from "../common/component/atom/bottomTabButton/TabRightBut
 import TabLeftButton from "../common/component/atom/bottomTabButton/TabLeftButton";
 import TabCenterButton from "../common/component/atom/bottomTabButton/TabCenterButton";
 import { useSelector } from "react-redux";
+import SitesList from "../screens/sitesView/SitesList";
+import BottomSitesNavigation from "../navigation/stackNavigation/BottomSitesNavigations";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const Tab = createBottomTabNavigator();
 let { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -41,7 +43,7 @@ function MyTabs(props) {
               // tabBarVisible:false,
               style: {
                 position: "absolute",
-                overflow: tab ? "visible" : "hidden",
+                overflow: !!tab ? "visible" : "hidden",
 
                 backgroundColor: "#3155a5",
                 height: Platform.OS === "ios" ? 40 : 40,
@@ -79,12 +81,12 @@ function MyTabs(props) {
               }}
             />
             <Tab.Screen
-              name="Calander"
-              component={Calender}
+              name="Sites"
+              component={BottomSitesNavigation}
               options={{
-                tabBarVisible: true,
+                tabBarVisible: !!tab,
                 tabBarButton: (props) => (
-                  <TabLeftButton {...props} label={"Calander"} />
+                  <TabLeftButton {...props} label={"Sites"} />
                 ),
               }}
             />

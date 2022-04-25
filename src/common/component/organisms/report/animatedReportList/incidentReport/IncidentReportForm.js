@@ -30,10 +30,7 @@ import AndroidOpenSettings from "react-native-android-open-settings";
 let { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const IncidentReports = ({ navigation, route }) => {
   let clears;
-  // LogBox.ignoreLogs([
-  //   "Can't perform a React state update on an unmounted component.",
-  // ]); // Ignore log notification by message
-  //  LogBox.ignoreAllLogs();
+
   const {
     id,
     site_id,
@@ -103,21 +100,9 @@ const IncidentReports = ({ navigation, route }) => {
       clearTimeout(clears);
     };
   }, [success]);
-  console.log(
-    "Success message is:!...££££££££££££££££££££££££££££££££££££££££££££",
-    success,
-    isLoading
-  );
-  console.log(
-    "date and time in incident report form is:!...",
-    typeof date,
-    typeof times,
-    date,
-    times
-  );
+
   const datepickerhandler = (time, dates) => {
     setDate(dates), setTime(time);
-    console.log("date type is", typeof date, typeof dates);
   };
   const MultilineTexHandler = (texts) => {
     setMultiLineText(texts);
@@ -126,14 +111,10 @@ const IncidentReports = ({ navigation, route }) => {
     setDropDown(value);
     setscrollEnabled(data);
   };
-  // const focusPoint = useRef(scrollEnabled);
+
   const fileHandler = (fileuri) => {
     setFile(fileuri);
-    console.log("file uri in incident report form is:!... is:!...", fileuri);
   };
-
-  // incidentReportSuccessHook(success, navigation);
-  // postReportErrorHook(error);
 
   const reportHandler = async () => {
     console.log("incident Report Form Handler !....", file);

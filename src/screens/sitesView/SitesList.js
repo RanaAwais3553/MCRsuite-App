@@ -13,12 +13,6 @@ const SitesList = ({ navigation }) => {
   //   console.log("cleanup function called!...");
   //   dispatch(hideOrShowBottomTabBarAction());
   // }, [dispatch]);
-  useEffect(() => {
-    dispatch(hideOrShowBottomTabBarAction());
-    return () => {
-      dispatch(showBottomTabBarAction());
-    };
-  }, [dispatch]);
   return (
     <View style={{ flex: 1, marginTop: 50 }}>
       <AnimatedSitesFlatList navigation={navigation} />

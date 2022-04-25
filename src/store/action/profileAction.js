@@ -21,7 +21,7 @@ export const updateProfileAction = (formData) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
     const { token, type, id, name, email, photo } = transformedData;
-    const response = await fetch(`https://mcrsuite.com/api/api-profile`, {
+    const response = await fetch(`https://mcrsuite.tk/api/api-profile`, {
       method: "POST",
 
       body: formData,
@@ -76,7 +76,7 @@ export const updatePasswordAction = (profileData) => {
     const userData = await AsyncStorage.getItem("userData");
     const transformedData = JSON.parse(userData);
     const { token, type, id, photo } = transformedData;
-    const response = await fetch(`https://mcrsuite.com/api/api-profile/${id}`, {
+    const response = await fetch(`https://mcrsuite.tk/api/api-profile/${id}`, {
       method: "PUT",
 
       body: profileData.toString(),

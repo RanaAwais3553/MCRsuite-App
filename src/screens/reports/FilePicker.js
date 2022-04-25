@@ -106,7 +106,7 @@ const FilePicker = ({ fileHandler, attachments, update, id, type }) => {
   };
   console.log("image is:!...", image);
   const serverFileView = (attachment) => {
-    const url = `https://mcrsuite.com/files/${attachment}`;
+    const url = `https://mcrsuite.tk/files/${attachment}`;
     const extension = getFileExtention(url);
     console.log("file extension is :!....", extension);
     const localFile = `${RNFS.DocumentDirectoryPath}/temporaryfile.${extension[0]}`;
@@ -135,7 +135,7 @@ const FilePicker = ({ fileHandler, attachments, update, id, type }) => {
     console.log("in delete incident report API:!..", file, indx);
     axios
       .get(
-        `https://mcrsuite.com/api/deleteFile?type=${type}&id=${id}&fileName=${file}`
+        `https://mcrsuite.tk/api/deleteFile?type=${type}&id=${id}&fileName=${file}`
       )
       .then(() => {
         console.log("file delete success"),

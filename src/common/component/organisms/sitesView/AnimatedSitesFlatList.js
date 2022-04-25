@@ -14,6 +14,7 @@ import AnimatedSitesList from "./AnimatedSitesList";
 import { fetchSiteListData } from "../../../../store/action/siteListAction";
 import ActivityIndicatorComponent from "../../atom/ActivityIndicatorComponent";
 import { useDispatch, useSelector } from "react-redux";
+import { hideOrShowBottomTabBarAction } from "../../../../store/action/hideOrShowBottomTabBarAction";
 
 const AnimatedSitesFlatList = ({ navigation }) => {
   LogBox.ignoreAllLogs();
@@ -46,9 +47,10 @@ const AnimatedSitesFlatList = ({ navigation }) => {
   }, []);
 
   const siteListArray = useSelector((state) => state.siteList.siteListArray);
+  console.log("site list array is:!......", siteListArray);
   useEffect(() => {
     siteListArray && setFullData(siteListArray);
-  }, []);
+  }, [siteListArray]);
   const handleSearch = (text) => {
     if (text) {
       const newData = siteListArray.filter((item) => {
@@ -88,6 +90,7 @@ const AnimatedSitesFlatList = ({ navigation }) => {
               }}
             >
               <TextInput
+                underlineColorAndroid={"transparent"}
                 autoCapitalize="none"
                 autoCorrect={false}
                 //  autoFocus={true}
@@ -121,6 +124,7 @@ const AnimatedSitesFlatList = ({ navigation }) => {
                   email: itemData.item.email,
                   address: itemData.item.address,
                   sitesTimeSlotsArray: itemData.item.sitecalendars,
+                  id: itemData.item.id,
                 });
               }}
             />

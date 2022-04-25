@@ -9,6 +9,9 @@ import scanResponseReducer from "./reducer/scanResponseReducer";
 import postReportReducer from "./reducer/postReportReducer";
 import nfcReducer from "./reducer/nfcReducer";
 import modalReducer from "./reducer/modalReducer";
+import fetchNewsReel from "./reducer/fetchNewsReel";
+import fetchSiteEvents from "./reducer/fetchSiteEvents";
+import createEventHandlerReducer from "./reducer/createEventHandlerReducer";
 
 const rootReducer = combineReducers({
   tabValue: hideOrShowBottomTabBarReducer,
@@ -20,6 +23,9 @@ const rootReducer = combineReducers({
   postRes: postReportReducer,
   nfc: nfcReducer,
   modl: modalReducer,
+  newsReel: fetchNewsReel,
+  siteEvents: fetchSiteEvents,
+  createEvent: createEventHandlerReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

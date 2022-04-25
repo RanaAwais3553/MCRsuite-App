@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import TextStyle from "../TextStyle";
 import { useIsFocused } from "@react-navigation/native";
 import styles from "../../../../../styles";
-import Octicons from "react-native-vector-icons/Octicons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 // import {useSelector} from 'react-redux'
 const TabLeftButton = ({ label, onPress }) => {
   const isFocused = useIsFocused();
@@ -11,7 +11,7 @@ const TabLeftButton = ({ label, onPress }) => {
     <TouchableOpacity
       accessibilityRole="button"
       activeOpacity={0.8}
-      disabled={true}
+      // disabled={false}
       onPress={onPress}
       style={styles.bottomTabBarButtonLeftTouchAbleStyle}
     >
@@ -25,13 +25,13 @@ const TabLeftButton = ({ label, onPress }) => {
             }}
           >
             {" "}
-            Calendar{" "}
+            Sites{" "}
           </TextStyle>
         ) : (
-          <Octicons
-            name="calendar"
+          <FontAwesome5
+            name="sitemap"
             color={isFocused ? "#d14e52" : "#a6a2a2"}
-            size={isFocused ? 30 : 26}
+            size={isFocused ? 30 : 22}
           />
         )}
       </View>

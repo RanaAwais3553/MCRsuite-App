@@ -23,9 +23,9 @@ const SitesListHeader = ({ siteListArray, navigation }) => {
             //    backgroundColor: "#121212",
           }}
         >
-          Visit Sites
+          News Reel
         </Text>
-        {siteListArray.length > 6 && (
+        {/* {siteListArray.length > 6 && (
           <TouchableOpacity
             onPress={() => navigation.navigate("SitesList")}
             style={{
@@ -45,7 +45,7 @@ const SitesListHeader = ({ siteListArray, navigation }) => {
                 //    backgroundColor: "#121212",
               }}
             >
-              See all
+              View all
             </Text>
             <Icon
               name="keyboard-arrow-right"
@@ -54,7 +54,7 @@ const SitesListHeader = ({ siteListArray, navigation }) => {
               color="#3155a5"
             />
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     </View>
   );
